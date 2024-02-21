@@ -5,6 +5,15 @@ from django.db import models
 
 
 
+class Filials(models.Model):
+    name = models.CharField(max_length=128, verbose_name='Филиал')
+    fio_exicutor_filial = models.ForeignKey('Exicuters', blank=False, verbose_name='ФИО сотрудников привязанных к филиалу')
+
+
+
+
+
+
 class Exicuters(models.Model):
     fio = models.CharField(max_length=128, blank=True, verbose_name='ФИО исполнителя')
     def __str__(self):
