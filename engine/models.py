@@ -5,12 +5,10 @@ from django.db import models
 
 
 
+
 class Filials(models.Model):
     name = models.CharField(max_length=128, verbose_name='Филиал')
     fio_exicutor_filial = models.ForeignKey('Exicuters', blank=False, verbose_name='ФИО сотрудников привязанных к филиалу', on_delete=models.PROTECT)
-
-
-
 
 
 
@@ -31,7 +29,7 @@ class Reestr_oferts(models.Model):
     exicutor = models.ForeignKey(Exicuters, on_delete=models.PROTECT, verbose_name='Исполнитель')
     price = models.FloatField(max_length=10, verbose_name='Цена')
     date_buhgt = models.DateField(verbose_name='Дата передачи в бухгалтерию')
-    comment = models.CharField(max_length=512)
+    comment = models.CharField(max_length=512, verbose_name='Комментарий')
     
 
 
