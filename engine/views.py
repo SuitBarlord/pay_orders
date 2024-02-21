@@ -8,8 +8,13 @@ from .forms import CreateOrderForm
 
 def main(request, *args, **kwargs):
     orders = Reestr_oferts.objects.all()
-    context ={
-        'orders': orders
+    sum = 0
+    for order in orders:
+        sum = sum + order.price
+    
+    context = {
+        'orders': orders,
+        'sum': sum
     }
     return render(request, 'orders/base.html', context=context)
 

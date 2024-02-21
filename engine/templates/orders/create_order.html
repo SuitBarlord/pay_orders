@@ -1,3 +1,4 @@
+{% extends 'orders/base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -7,6 +8,7 @@
 </head>
 <body>
     <header class="site-header">
+      <a href="/main/">Главная</a>
       <div>
         <form method="post">
             {% csrf_token %}
