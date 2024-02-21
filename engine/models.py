@@ -7,7 +7,7 @@ from django.db import models
 
 class Filials(models.Model):
     name = models.CharField(max_length=128, verbose_name='Филиал')
-    fio_exicutor_filial = models.ForeignKey('Exicuters', blank=False, verbose_name='ФИО сотрудников привязанных к филиалу')
+    fio_exicutor_filial = models.ForeignKey('Exicuters', blank=False, verbose_name='ФИО сотрудников привязанных к филиалу', on_delete=models.PROTECT)
 
 
 
