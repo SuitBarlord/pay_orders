@@ -8,33 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Панель навигации</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Переключатель навигации">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Главная</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/create_orders">Создание платного договора</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-    <header class="site-header">
-    </header>
-    <main>
-      <div>
-        {% for order in orders %}
-        <p>{{ order.fio }}</p>
-        {% endfor %}
-        {{ sum }}
-      </div>
-    </main>
+
+  {% block nav %}{% endblock %}
+  <header>{% block title %}{% endblock %}</header>
+  <main>{% block content %}{% endblock %}</main>
+
 </body>
 </html>

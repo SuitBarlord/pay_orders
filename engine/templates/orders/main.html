@@ -1,0 +1,11 @@
+{% extends "orders/base.html" %}
+{% block nav %}{% include "orders/nav.html" %}{% endblock %}
+{% block content %} 
+<div>
+    {% for order in orders %}
+    <p>{{ order.fio }}</p>
+    {% endfor %}
+    {{ sum }}
+</div>
+{% endblock %}
+

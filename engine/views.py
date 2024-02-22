@@ -16,7 +16,7 @@ def main(request, *args, **kwargs):
         'orders': orders,
         'sum': sum
     }
-    return render(request, 'orders/base.html', context=context)
+    return render(request, 'orders/main.html', context=context)
 
 
 
