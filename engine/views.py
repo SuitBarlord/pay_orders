@@ -1,8 +1,10 @@
+from typing import Any
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from .models import Reestr_oferts
 from .forms import CreateOrderForm
+from django.views.generic.edit import UpdateView
 
 
 
@@ -35,4 +37,17 @@ def create_orders(request):
             'form': order_form
         }
         return render(request, 'orders/create_order.html', context=context)
+    
+# Редактирование записи модели
+class EditOrder(UpdateView):
+    model = Reestr_oferts
+    form_class = CreateOrderForm
+    template_name = 'orders/create_order.html'
+    success_url = '/main/'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['order'] = Reestr_oferts.objects.all()
+        return context
+        
         
