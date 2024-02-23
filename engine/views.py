@@ -21,6 +21,12 @@ def main(request, *args, **kwargs):
     return render(request, 'orders/main.html', context=context)
 
 
+def get_order(request, pk):
+    order = Reestr_oferts.objects.get(pk=pk)
+    context = {
+        'order': order
+    }
+    return render(request, 'orders/order.html', context=context)
 
 
 def create_orders(request):
