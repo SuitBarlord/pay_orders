@@ -1,0 +1,21 @@
+{% extends "orders/base.html" %}
+{% block nav %}{% include "orders/nav.html" %}{% endblock %}
+{% block content %} 
+<div>
+    {% for order in orders %}
+
+
+</div>
+<div class="card" style="margin: 10px 100px 10px 100px;">
+    <div class="card-header">
+      Номер договора - {{ order.number_orders_vozm }}
+    </div>
+    <div class="card-body">
+      <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Дата акта - {{ order.date_akt }}</p>
+      <a href="{% url 'get_order' id_filial=filial id_order=order.pk %}" class="btn btn-primary">Перейти к договору</a>
+    </div>
+  </div>
+    {% endfor %}
+
+{{ sum }}
+{% endblock %}

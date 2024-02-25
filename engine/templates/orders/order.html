@@ -2,8 +2,20 @@
 {% block nav %}{% include 'orders/nav.html' %}{% endblock %}
 {% block content %}
 <div>
-        <p>{{ order.pk }}</p>
-        <p>{{ order.fio }}</p>
-        <p>{{ order.comment }}</p>
+
+
+
+</div>
+<div class="card" style="margin: 10px 100px 10px 100px;">
+    <div class="card-header">
+      Номер договора - {{ order.number_orders_vozm }}
+      <p>{{ order.pk }}</p>
+    </div>
+    <div class="card-body">
+      <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Цена - {{ order.price }}, Дата акта - {{ order.date_akt }}, Комментарий - {{ order.comment }}</p>
+      <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

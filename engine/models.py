@@ -8,7 +8,8 @@ from django.db import models
 
 class Filials(models.Model):
     name = models.CharField(max_length=128, verbose_name='Филиал')
-    
+    def __str__(self):
+        return self.name
 
 
 
@@ -28,6 +29,7 @@ class Reestr_oferts(models.Model):
 
     date_akt = models.DateField(auto_now_add=True, verbose_name='Дата акта')
     exicutor = models.ForeignKey(Exicuters, on_delete=models.PROTECT, verbose_name='Исполнитель')
+    filial = models.ForeignKey(Filials, on_delete=models.PROTECT, verbose_name='Филиал')
     price = models.FloatField(max_length=10, verbose_name='Цена')
     date_buhgt = models.DateField(verbose_name='Дата передачи в бухгалтерию')
     comment = models.CharField(max_length=512, verbose_name='Комментарий')

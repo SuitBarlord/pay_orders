@@ -2,7 +2,7 @@ from typing import Any
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from .models import Reestr_oferts
+from .models import Reestr_oferts, Filials
 from .forms import CreateOrderForm
 from django.views.generic.edit import UpdateView
 
@@ -21,8 +21,27 @@ def main(request, *args, **kwargs):
     return render(request, 'orders/main.html', context=context)
 
 
-def get_order(request, pk):
-    order = Reestr_oferts.objects.get(pk=pk)
+def get_filials(request):
+    filials = Filials.objects.all()
+    context = {
+        'filials': filials
+    }
+    return render(request, 'orders/main.html', context=context)
+
+
+def get_orders(request, pk):
+    orders = Reestr_oferts.objects.filter(filial_id=pk)
+    filial = pk
+    context = {
+        'orders': orders,
+        'filial': filial
+    }
+    return render(request, 'orders/orders.html', context=context)
+    
+
+
+def get_order(request, id_filial, id_order):
+    order = Reestr_oferts.objects.get(pk=id_order)
     context = {
         'order': order
     }
