@@ -1,13 +1,17 @@
 {% extends "orders/base.html" %}
+{% load crispy_forms_tags %}
 {% block nav %}{% include "orders/nav.html" %}{% endblock %}
-{% block content %} 
-<form method="get" action="{% url 'update-list' %}">
-  <p>Filter: <input type="text" value={{filter}} name="filter"/></p>
-  <p>order_by: <input type="text" value={{orderby}} name="orderby"/></p>
-  <p><input type="submit" name="submit" value="submit"/></p>
-</form>
+{% block content %}
 <div>
-    {% for order in orders %}
+  <form method="GET">
+    {{ filter.form|crispy }}
+  <input  type="submit" value="Создать"/>
+  </form>
+  
+</div> 
+
+<div>
+    {% for order in filter.qs %}
 
 
 </div>

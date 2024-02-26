@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from .models import Reestr_oferts, Filials
 from .forms import CreateOrderForm
 from django.views.generic.edit import UpdateView
+from .filters import ProductFilter
 
 
 
@@ -30,13 +31,15 @@ def get_filials(request):
 
 
 def get_orders(request, pk):
-    orders = Reestr_oferts.objects.filter(filial_id=pk)
-    filial = pk
-    context = {
-        'orders': orders,
-        'filial': filial
-    }
-    return render(request, 'orders/orders.html', context=context)
+    filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+    return render(request, 'orders/orders.html', {'filter': filter})
+    # orders = Reestr_oferts.objects.filter(filial_id=pk)
+    # filial = pk
+    # context = {
+    #     'orders': orders,
+    #     'filial': filial
+    # }
+    # return render(request, 'orders/orders.html', context=context)
     
 
 
