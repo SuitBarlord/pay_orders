@@ -1,5 +1,7 @@
-{% block nav %}{% include "orders/nav.html" %}{% endblock %}
+
 {% load crispy_forms_tags %}
+{% block nav %}{% include "orders/nav.html" %}{% endblock %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,23 +11,15 @@
 </head>
 <body>
     <header class="site-header">
-
-
-
-      <div class="row justify-content-center overflow-hidden">
+      <div class="row justify-content-center">
         <div class="col-8">
         <form method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <input  type="submit" value="Создать"/>
+            <input  type="submit" value="Сохранить"/>
         </form>
       </div>
       </div>
-      
-
-
-
-
     </header>
 </body>
 </html>

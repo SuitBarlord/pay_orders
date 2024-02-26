@@ -40,7 +40,7 @@ def get_orders(request, pk):
     
 
 
-def get_order(request, id_filial, id_order):
+def get_order(request, id_order):
     order = Reestr_oferts.objects.get(pk=id_order)
     context = {
         'order': order
@@ -67,7 +67,7 @@ def create_orders(request):
 class EditOrder(UpdateView):
     model = Reestr_oferts
     form_class = CreateOrderForm
-    template_name = 'orders/create_order.html'
+    template_name = 'orders/edit_order.html'
     success_url = '/main/'
     
     def get_context_data(self, *args, **kwargs):
