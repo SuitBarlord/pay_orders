@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'engine',
     'crispy_forms',
     'crispy_bootstrap4',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
