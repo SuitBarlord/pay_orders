@@ -2,40 +2,62 @@
 {% load crispy_forms_tags %}
 {% block nav %}{% include "orders/nav.html" %}{% endblock %}
 {% block content %}
-<div>
-  <form method="GET">
-    {{ filter.form|crispy }}
-  <input  type="submit" value="Создать"/>
-  </form>
-  
-</div> 
-
-<div>
-    {% for order in filter.qs %}
-
-
-</div>
-<div class="card" style="margin: 10px 100px 10px 100px;">
-    <div class="card-header">
-      Номер договора - {{ order.number_orders_vozm }}
+<div class="container-fluid text-left">
+  <div class="row" style="height: 850px">
+    <div class="col-2 column-2">
+      <form method="GET">
+        {{ filter.form|crispy }}
+      <input  type="submit" value="Применить"/>
+      </form>
     </div>
-    <div class="card-body">
-      <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Дата акта - {{ order.date_akt }}</p>
-      <a href="{% url 'get_order' id_order=order.pk %}" class="btn btn-primary">Перейти к договору</a>
+    <div class="col-7 position-relative">
+      <div class="overflow-auto scroll-container">
+      {% for order in filter.qs %}
+      <div class="card" style="margin: 10px 10px 10px 10px;">
+          <div class="card-header">
+            Номер договора - {{ order.number_orders_vozm }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Дата акта - {{ order.date_akt }}</p>
+            <a href="{% url 'get_order' id_order=order.pk %}" class="btn btn-primary">Перейти к договору</a>
+          </div>
+        </div>
+          {% endfor %}
+          <div class="fixed-bottom fixed-right" style="position: fixed; bottom: 0; right: 0; padding: 20px;">
+            <a href="/paid_departure/create_order/">
+              <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </a>
+          </div>
     </div>
   </div>
-    {% endfor %}
-    <div class="fixed-bottom fixed-right" style="position: fixed; bottom: 0; right: 0; padding: 20px;">
-      <a href="/paid_departure/create_order/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-        </svg>
-      </a>
-    </div>
-    
-    
-    
+</div>
 
-{{ sum }}
-{% endblock %}
+  
+
+</div> 
+<style type="text/css">
+      .scroll-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+</style>
+ 
+      {% endblock %}
+
+  
+
+
+
+
+
+
+
+
+
