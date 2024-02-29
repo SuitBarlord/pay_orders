@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
 
 
     add_fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password1', 'password2')}),
         (('Personal Info'), {'fields': ('first_name', 'last_name')}),
         (('Permissions'), {'fields': ('groups', 'user_permissions')}),
         (('Other'), {'fields': ('filial', 'root_dir_user', 'is_personal')})
