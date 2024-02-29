@@ -11,6 +11,14 @@
           <li class="nav-item">
             <a class="nav-link" href="/paid_departure/create_order/">Создание платного договора</a>
           </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form method="post" action="/accounts/logout/">
+              {% csrf_token %}
+              <p><input type="submit" value="Logout"></p>
+            </form>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </div>

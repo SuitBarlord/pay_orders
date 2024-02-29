@@ -1,11 +1,13 @@
 from typing import Any
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .models import Reestr_oferts, Filials
 from .forms import CreateOrderForm
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
+
 
 
 
@@ -29,7 +31,7 @@ def get_filials(request):
     }
     return render(request, 'orders/main.html', context=context)
 
-
+@login_required
 def get_orders(request, pk):
     filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
     return render(request, 'orders/orders.html', {'filter': filter})

@@ -20,5 +20,6 @@ from engine import views as orders_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('paid_departure/', include('engine.urls')),
+    path('accounts/', include('users.urls')),
     # path('create_orders/', orders_views.create_orders)
 ]
