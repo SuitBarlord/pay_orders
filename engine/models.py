@@ -15,7 +15,7 @@ class Filials(models.Model):
 
 class Exicuters(models.Model):
     fio = models.CharField(max_length=128, blank=True, verbose_name='ФИО исполнителя')
-    filial = models.ForeignKey(Filials, on_delete=models.PROTECT, verbose_name='Филиал к котрому привязан исполнитель', default='Тест')
+    filial = models.ForeignKey(Filials, on_delete=models.PROTECT, verbose_name='Филиал к котрому привязан исполнитель')
     def __str__(self):
         return self.fio
 
