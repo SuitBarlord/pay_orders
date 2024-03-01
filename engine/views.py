@@ -1,6 +1,7 @@
 from typing import Any
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Create your views here.
 from .models import Reestr_oferts, Filials
@@ -23,9 +24,12 @@ def main(request, *args, **kwargs):
     }
     return render(request, 'orders/main.html', context=context)
 
-
+@login_required
 def get_filials(request):
-    filials = Filials.objects.all()
+    if not request.user.has_perm('engine.view_reestr_oferts'):
+        filials = Filials.objects.filter(name=request.user.filial)
+    else:
+        filials = Filials.objects.all()
     context = {
         'filials': filials
     }
@@ -44,7 +48,7 @@ def get_orders(request, pk):
     # return render(request, 'orders/orders.html', context=context)
     
 
-
+@login_required
 def get_order(request, id_order):
     order = Reestr_oferts.objects.get(pk=id_order)
     context = {
@@ -55,12 +59,15 @@ def get_order(request, id_order):
 
 def create_orders(request):
     if request.method == 'POST':
-        order_form = CreateOrderForm(request.POST)
-        if order_form.is_valid():
-            order_form.save()
-            return redirect('/main/')
+        if not request.user.has_perm('engine.add_reestr_oferts'):
+            raise PermissionError
         else:
-            return render(request, 'orders/create_order.html', {'form': order_form})
+            order_form = CreateOrderForm(request.POST)
+            if order_form.is_valid():
+                order_form.save()
+                return redirect('/paid_departure/filials/')
+            else:
+                return render(request, 'orders/create_order.html', {'form': order_form})
     else:
         order_form = CreateOrderForm()
         context = {
@@ -69,11 +76,12 @@ def create_orders(request):
         return render(request, 'orders/create_order.html', context=context)
     
 # Редактирование записи модели
-class EditOrder(UpdateView):
+class EditOrder(PermissionRequiredMixin, UpdateView):
+    permission_required = 'engine.change_reestr_oferts'
     model = Reestr_oferts
     form_class = CreateOrderForm
     template_name = 'orders/edit_order.html'
-    success_url = '/main/'
+    success_url = '/paid_departure/filials/'
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
