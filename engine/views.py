@@ -76,6 +76,7 @@ def get_order(request, id_order):
     }
     return render(request, 'orders/order.html', context=context)
 
+
 @login_required
 def create_orders(request):
     if request.method == 'POST':
