@@ -49,7 +49,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-LOGIN_REDIRECT_URL = '/paid_departure/filials/'
+LOGIN_REDIRECT_URL = '/main/'
 
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 

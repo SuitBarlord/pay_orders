@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from engine import views as orders_views
+from engine.views import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('main/', main),
     path('paid_departure/', include('engine.urls')),
     path('accounts/', include('users.urls')),
     # path('create_orders/', orders_views.create_orders)

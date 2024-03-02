@@ -1,17 +1,38 @@
 {% extends "orders/base.html" %}
 {% block nav %}{% include "orders/nav.html" %}{% endblock %}
 {% block content %} 
-<div>
-    {% for filial in filials %}
 
-
-</div>
-<div class="card" style="margin: 10px 100px 10px 100px;">
-    <div class="card-header">
-      Филиал - {{ filial.name }}
-      <a href="{% url 'get_orders' filial.pk %}" class="btn btn-primary">Перейти к {{ filial.name }}</a>
+<div class="container-fluid">
+  <div class="row" style="margin-top: 40px;">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Реестры по оферте</h5>
+          <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к дополнительному контенту.</p>
+          <a href="/paid_departure/filials/" class="btn btn-primary">Перейти</a>
+        </div>
+      </div>
     </div>
-    {% endfor %}
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Платные выезда</h5>
+          <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к дополнительному контенту.</p>
+          <a href="#" class="btn btn-primary">Перейти</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Особое обращение с заголовком</h5>
+          <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к дополнительному контенту.</p>
+          <a href="#" class="btn btn-primary">Перейти</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}

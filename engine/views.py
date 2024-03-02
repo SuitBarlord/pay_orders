@@ -33,30 +33,50 @@ def get_filials(request):
     context = {
         'filials': filials
     }
-    return render(request, 'orders/main.html', context=context)
+    return render(request, 'orders/filials.html', context=context)
+
 
 @login_required
 def get_orders(request, pk):
-    filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-    return render(request, 'orders/orders.html', {'filter': filter})
-    # orders = Reestr_oferts.objects.filter(filial_id=pk)
-    # filial = pk
-    # context = {
-    #     'orders': orders,
-    #     'filial': filial
-    # }
-    # return render(request, 'orders/orders.html', context=context)
+    if not request.user.has_perm('engine.view_reestr_oferts'):
+        # Проверка на придлежность пользователя к филиалу, который передается в параметре маршрута
+        queryset = Reestr_oferts.objects.filter(filial_id=pk)
+        # Проверка на пустой QuerySet
+        if not queryset:
+            filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+            return render(request, 'orders/orders.html', {'filter': filter})
+        else:
+            filial = str(queryset[0].filial)
+            user_filial = str(request.user.filial)
+            if filial == user_filial:
+                filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+                return render(request, 'orders/orders.html', {'filter': filter})
+            else: 
+                # Принудительное исключение 
+                raise PermissionError
+    else:
+        filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+        return render(request, 'orders/orders.html', {'filter': filter})
     
 
 @login_required
 def get_order(request, id_order):
-    order = Reestr_oferts.objects.get(pk=id_order)
+    if not request.user.has_perm('engine.view_reestr_oferts'):
+        queryset = Reestr_oferts.objects.get(pk=id_order)
+        filial = str(queryset.filial)
+        user_filial = str(request.user.filial)
+        if filial == user_filial:
+            order = Reestr_oferts.objects.get(pk=id_order)
+        else:
+            raise PermissionError
+    else:
+        order = Reestr_oferts.objects.get(pk=id_order)
     context = {
         'order': order
     }
     return render(request, 'orders/order.html', context=context)
 
-
+@login_required
 def create_orders(request):
     if request.method == 'POST':
         if not request.user.has_perm('engine.add_reestr_oferts'):

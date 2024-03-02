@@ -1,0 +1,18 @@
+{% extends "orders/base.html" %}
+{% block nav %}{% include "orders/nav.html" %}{% endblock %}
+{% block content %} 
+
+
+<div>
+    {% for filial in filials %}
+
+</div>
+<div class="card" style="margin: 10px 100px 10px 100px;">
+    <div class="card-header">
+      Филиал - {{ filial.name }}
+      <a href="{% url 'get_orders' filial.pk %}" class="btn btn-primary">Перейти к {{ filial.name }}</a>
+    </div>
+    {% endfor %}
+
+
+{% endblock %}
