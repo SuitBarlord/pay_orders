@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import main, create_orders, get_order, EditOrder, get_filials, get_orders, EditExicutor
+from .views import main, create_orders, get_order, EditOrder, get_filials, get_orders, EditExicutor, create_exicuter
 
 
 
@@ -13,5 +13,5 @@ urlpatterns = [
     path('create_order/', create_orders),
     path('filials/orders/edit/<int:pk>/', EditOrder.as_view(), name='edit_order'),
     path('filials/edit_exicuter/<int:pk>/', EditExicutor.as_view(), name='edit_exicutor'),
-    # path('filials/create_exicuter/', )
+    path('filials/create_exicuter/', create_exicuter, name='create_exicuter')
 ]

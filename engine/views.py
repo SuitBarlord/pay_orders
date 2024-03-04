@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 from .models import Reestr_oferts, Filials, Exicuters
-from .forms import CreateOrderForm, CreateExicuterForm
+from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
 
@@ -60,19 +60,39 @@ def get_orders(request, pk):
     else:
         
         form = CreateExicuterForm()
-        if request.method == "POST":
-            form = CreateExicuterForm(request.POST)
-            if form.is_valid():
+        # if request.method == "POST":
+        #     form = CreateExicuterForm(request.POST)
+        #     if form.is_valid():
                 
-                form.save()
-                # return JsonResponse({'fio':fio, 'filial':filial}, status=200)
-            else:
-                errors = form.errors.as_json()
-                # return JsonResponse({'errors':errors}, status=400)
+        #         form.save()
+        #         # return JsonResponse({'fio':fio, 'filial':filial}, status=200)
+        #     else:
+        #         errors = form.errors.as_json()
+        #         return JsonResponse({'errors':errors}, status=400)
 
         exicuters_filial = Exicuters.objects.filter(filial_id=pk)
         filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
         return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
+    
+    
+def create_exicuter(request):
+    if request.method == 'POST':
+        if not request.user.has_perm('engine.add_reestr_oferts'):
+            raise PermissionError
+        else:
+            exicuter_form = CreateExicuterForm(request.POST)
+            if exicuter_form.is_valid():
+                exicuter_form.save()
+                return redirect('/paid_departure/filials/')
+            else:
+                pass
+                
+    # else:
+    #     exicuter_form = CreateExicuterForm()
+    #     context = {
+    #         'form': exicuter_form
+    #     }
+    #     return render(request, 'orders/create_exicuter.html', context=context)
     
 
 @login_required
@@ -129,7 +149,7 @@ class EditOrder(PermissionRequiredMixin, UpdateView):
 class EditExicutor(PermissionRequiredMixin, UpdateView):
     permission_required = 'engine.change_reestr_oferts'
     model = Exicuters
-    form_class = CreateExicuterForm
+    form_class = EditExicuterForm
     template_name = 'orders/edit_exicuter.html'
     success_url = '/paid_departure/filials/'
 

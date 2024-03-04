@@ -114,10 +114,10 @@ $(document).ready(function () {
               $.ajax({
                   data: $(this).serialize(), // получаем данные формы
                   type: "POST", // GET или POST
-                  url: "/paid_departure/filials/",
+                  url: '/paid_departure/filials/create_exicuter/',
                   // если успешно, то
                   success: function (response) {
-                      
+                      document.querySelector('#contactForm').reset()
                   },
                   // если ошибка, то
                   error: function (response) {

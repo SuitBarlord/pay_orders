@@ -21,3 +21,9 @@ class CreateExicuterForm(ModelForm):
     class Meta:
         model = Exicuters
         fields = ('fio', 'filial')
+        
+        
+class EditExicuterForm(ModelForm):
+    class Meta:
+        model = Exicuters
+        fields = ('fio', 'filial')
