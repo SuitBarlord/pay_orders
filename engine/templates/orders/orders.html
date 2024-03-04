@@ -4,13 +4,14 @@
 {% block content %}
 <div class="container-fluid text-left">
   <div class="row" style="height: 850px">
-    <div class="col-2 column-2">
+    <div class="col-2 column-2 border-right">
+      <h5>Поля фильтрации</h5>
       <form method="GET">
         {{ filter.form|crispy }}
       <button class="btn btn-primary" type="submit">Применить</button>
       </form>
     </div>
-    <div class="col-7 position-relative">
+    <div class="col-7 position-relative border-right">
       <div class="overflow-auto scroll-container">
       {% for order in filter.qs %}
       <div class="card" style="margin: 10px 10px 10px 10px;">
@@ -33,6 +34,59 @@
           </div>
     </div>
   </div>
+  
+  <div class="col-3 column-2">
+    <div class="container">
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Исполнители филиала
+              </button>
+            </h5>
+          </div>
+    
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              <ul class="list-group">
+                {% for exicuter in exicuters_filial %}
+                <li id="list-item" class="list-group-item">{{ exicuter.fio }}<a href="{% url 'edit_exicutor' exicuter.pk %}"><button style="margin-left: 42px;" id="list-item" class="btn btn-primary">Редактировать</button></a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Создать исполнителя филиала
+              </button>
+            </h5>
+          </div>
+    
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              <ul class="list-group">
+                <form id="contactForm">
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  <input  type="submit" value="Создать"/>
+                </form>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
 </div>
 
   
@@ -47,8 +101,35 @@
         right: 0;
         overflow: auto;
     }
+    #list-item {
+      font-size: 14px;
+    }
 </style>
- 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+          // отслеживаем событие отправки формы
+          $('#contactForm').submit(function () {
+              // создаем AJAX-вызов
+              $.ajax({
+                  data: $(this).serialize(), // получаем данные формы
+                  type: "POST", // GET или POST
+                  url: "/paid_departure/filials/",
+                  // если успешно, то
+                  success: function (response) {
+                      
+                  },
+                  // если ошибка, то
+                  error: function (response) {
+                      // предупредим об ошибке
+                      alert(response.responseJSON.errors);
+                      console.log(response.responseJSON.errors)
+                  }
+              });
+              return false;
+          });
+      })
+</script>
       {% endblock %}
 
   

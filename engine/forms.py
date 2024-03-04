@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Reestr_oferts
+from .models import Reestr_oferts, Exicuters
 from django import forms
 
 class CreateOrderForm(ModelForm):
@@ -15,3 +15,9 @@ class CreateOrderForm(ModelForm):
                        'type': 'date'
                       }),
         }
+
+
+class CreateExicuterForm(ModelForm):
+    class Meta:
+        model = Exicuters
+        fields = ('fio', 'filial')

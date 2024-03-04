@@ -2,10 +2,11 @@ from typing import Any
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import JsonResponse
 
 # Create your views here.
-from .models import Reestr_oferts, Filials
-from .forms import CreateOrderForm
+from .models import Reestr_oferts, Filials, Exicuters
+from .forms import CreateOrderForm, CreateExicuterForm
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
 
@@ -41,22 +42,37 @@ def get_orders(request, pk):
     if not request.user.has_perm('engine.view_reestr_oferts'):
         # Проверка на придлежность пользователя к филиалу, который передается в параметре маршрута
         queryset = Reestr_oferts.objects.filter(filial_id=pk)
+        exicuters_filial = Exicuters.objects.filter(filial_id=pk)
         # Проверка на пустой QuerySet
         if not queryset:
+            exicuters_filial = Exicuters.objects.filter(filial_id=pk)
             filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-            return render(request, 'orders/orders.html', {'filter': filter})
+            return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial})
         else:
             filial = str(queryset[0].filial)
             user_filial = str(request.user.filial)
             if filial == user_filial:
                 filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-                return render(request, 'orders/orders.html', {'filter': filter})
+                return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial})
             else: 
                 # Принудительное исключение 
                 raise PermissionError
     else:
+        
+        form = CreateExicuterForm()
+        if request.method == "POST":
+            form = CreateExicuterForm(request.POST)
+            if form.is_valid():
+                
+                form.save()
+                # return JsonResponse({'fio':fio, 'filial':filial}, status=200)
+            else:
+                errors = form.errors.as_json()
+                # return JsonResponse({'errors':errors}, status=400)
+
+        exicuters_filial = Exicuters.objects.filter(filial_id=pk)
         filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-        return render(request, 'orders/orders.html', {'filter': filter})
+        return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
     
 
 @login_required
@@ -109,4 +125,15 @@ class EditOrder(PermissionRequiredMixin, UpdateView):
         context['order'] = Reestr_oferts.objects.all()
         return context
         
-        
+
+class EditExicutor(PermissionRequiredMixin, UpdateView):
+    permission_required = 'engine.change_reestr_oferts'
+    model = Exicuters
+    form_class = CreateExicuterForm
+    template_name = 'orders/edit_exicuter.html'
+    success_url = '/paid_departure/filials/'
+
+    def get_context_data(self, *args, **kwargs): 
+        context = super().get_context_data(*args, **kwargs)
+        context['exicuter'] = Exicuters.objects.all()
+        return context
