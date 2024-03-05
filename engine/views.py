@@ -45,21 +45,29 @@ def get_orders(request, pk):
         exicuters_filial = Exicuters.objects.filter(filial_id=pk)
         # Проверка на пустой QuerySet
         if not queryset:
+            form = CreateExicuterForm()
+            # Инициализация выбора поля со связанной моделью по умолчанию
+            form.initial['filial'] = pk
             exicuters_filial = Exicuters.objects.filter(filial_id=pk)
             filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-            return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial})
+            return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
         else:
             filial = str(queryset[0].filial)
             user_filial = str(request.user.filial)
             if filial == user_filial:
+                form = CreateExicuterForm()
+                # Инициализация выбора поля со связанной моделью по умолчанию
+                form.initial['filial'] = pk
                 filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
-                return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial})
+                return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
             else: 
                 # Принудительное исключение 
                 raise PermissionError
     else:
         
         form = CreateExicuterForm()
+        # Инициализация выбора поля со связанной моделью по умолчанию
+        form.initial['filial'] = pk
         # if request.method == "POST":
         #     form = CreateExicuterForm(request.POST)
         #     if form.is_valid():
@@ -77,7 +85,7 @@ def get_orders(request, pk):
     
 def create_exicuter(request):
     if request.method == 'POST':
-        if not request.user.has_perm('engine.add_reestr_oferts'):
+        if not request.user.has_perm('engine.add_exicuters'):
             raise PermissionError
         else:
             exicuter_form = CreateExicuterForm(request.POST)
