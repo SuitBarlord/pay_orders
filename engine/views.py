@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 from .models import Reestr_oferts, Filials, Exicuters
-from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm
+from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm, CreateExicuterFilialFilterForm
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
 
@@ -45,17 +45,17 @@ def get_orders(request, pk):
         exicuters_filial = Exicuters.objects.filter(filial_id=pk)
         # Проверка на пустой QuerySet
         if not queryset:
-            form = CreateExicuterForm()
+            form = CreateExicuterFilialFilterForm(id=pk)
             # Инициализация выбора поля со связанной моделью по умолчанию
             form.initial['filial'] = pk
             exicuters_filial = Exicuters.objects.filter(filial_id=pk)
-            filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+            filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
             return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
         else:
             filial = str(queryset[0].filial)
             user_filial = str(request.user.filial)
             if filial == user_filial:
-                form = CreateExicuterForm()
+                form = CreateExicuterFilialFilterForm(id=pk)
                 # Инициализация выбора поля со связанной моделью по умолчанию
                 form.initial['filial'] = pk
                 filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
@@ -65,7 +65,7 @@ def get_orders(request, pk):
                 raise PermissionError
     else:
         
-        form = CreateExicuterForm()
+        form = CreateExicuterFilialFilterForm(id=None)
         # Инициализация выбора поля со связанной моделью по умолчанию
         form.initial['filial'] = pk
         # if request.method == "POST":

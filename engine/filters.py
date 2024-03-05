@@ -10,4 +10,4 @@ class ProductFilter(django_filters.FilterSet, django_filters.RangeFilter):
     # date_buhgt = django_filters.DateTimeFilter(lookup_expr='gte', label='Date')
     class Meta:
         model = Reestr_oferts
-        fields = ['exicutor', 'filial']
+        fields = ['exicutor']

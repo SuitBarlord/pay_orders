@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Reestr_oferts, Exicuters
+from .models import Reestr_oferts, Exicuters, Filials
 from django import forms
 
 class CreateOrderForm(ModelForm):
@@ -22,8 +22,33 @@ class CreateExicuterForm(ModelForm):
         model = Exicuters
         fields = ('fio', 'filial')
         
+
+class CreateExicuterFilialFilterForm(ModelForm):
+    def __init__(self, *args, id=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if id == None:
+            pass 
+        else:
+            self.fields['filial'].queryset = Filials.objects.filter(id=id)
+    class Meta:
+        model = Exicuters
+        fields = ('fio', 'filial')
+        
         
 class EditExicuterForm(ModelForm):
     class Meta:
         model = Exicuters
         fields = ('fio', 'filial')
+        
+        
+# from django import forms
+# from myapp.models import MyModel
+
+# class MyModelForm(forms.ModelForm):
+#     def __init__(self, *args, route=None, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['related_records'].queryset = MyRelatedModel.objects.filter(route=route)
+    
+#     class Meta:
+#         model = MyModel
+#         fields = '__all__'
