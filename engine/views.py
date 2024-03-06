@@ -58,7 +58,7 @@ def get_orders(request, pk):
                 form = CreateExicuterFilialFilterForm(id=pk)
                 # Инициализация выбора поля со связанной моделью по умолчанию
                 form.initial['filial'] = pk
-                filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+                filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
                 return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
             else: 
                 # Принудительное исключение 
@@ -79,7 +79,7 @@ def get_orders(request, pk):
         #         return JsonResponse({'errors':errors}, status=400)
 
         exicuters_filial = Exicuters.objects.filter(filial_id=pk)
-        filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk))
+        filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
         return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
     
     
