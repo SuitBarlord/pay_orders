@@ -165,3 +165,67 @@ class EditExicutor(PermissionRequiredMixin, UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['exicuter'] = Exicuters.objects.all()
         return context
+    
+
+import PyPDF2
+def pdf(request):
+    import PyPDF2
+
+    # Открываем исходный файл PDF
+    from PyPDF2 import PdfFileReader, PdfFileWriter
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    # Открыть исходный файл PDF
+    with open('example.pdf', 'rb') as file:
+        pdf = PdfFileReader(file)
+
+        # Создать новый файл PDF для записи
+        output = PdfFileWriter()
+
+        # Получить первую страницу документа
+        page = pdf.getPage(0)
+
+        # Создать новую страницу с теми же размерами, что и исходная
+        c = canvas.Canvas('вставленный_файл.pdf', pagesize=letter)
+        pdfmetrics.registerFont(TTFont('CustomFont', 'helvetica.ttf'))
+        # Установить нужный шрифт и размер
+        c.setFont('CustomFont', 14)
+
+        # Вставить текст на новой странице
+        c.drawString(200, 400, 'Новая строка')
+
+        # Завершить рисование на новой странице
+        c.save()
+
+        # Прочитать вставленный файл PDF
+        with open('вставленный_файл.pdf', 'rb') as inserted:
+            inserted_pdf = PdfFileReader(inserted)
+
+            # Получить вставленную страницу
+            inserted_page = inserted_pdf.getPage(0)
+
+            # Скопировать содержимое исходной страницы на новую
+            inserted_page.mergeTranslatedPage(page, 0, 0, expand=False)
+
+            # Добавить страницу в новый документ
+            output.addPage(inserted_page)
+
+            # Добавить оставшиеся страницы исходного файла
+            for i in range(1, pdf.getNumPages()):
+                output.addPage(pdf.getPage(i))
+
+            # Сохранить новый файл
+            with open('измененный_файл.pdf', 'wb') as output_file:
+                output.write(output_file)
+
+
+
+
+
+
+
+
+
+
