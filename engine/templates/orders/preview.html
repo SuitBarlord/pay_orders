@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Template</title>
+</head>
+<body>
+    <h1>Preview Template</h1>
+
+    <!-- Отображение предпросмотра -->
+    <iframe src="{{ preview_file }}" width="100%" height="600px"></iframe>
+
+    <!-- Форма для скачивания шаблона -->
+    <form method="POST" action="{% url 'download_template' %}">
+        {% csrf_token %}
+        <input type="hidden" name="preview_file" value="{{ preview_file }}">
+        <button type="submit">Download</button>
+    </form>
+</body>
+</html>
