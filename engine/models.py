@@ -52,8 +52,7 @@ class Contract_Data(models.Model):
     location = models.OneToOneField(Location, on_delete=models.PROTECT, blank=True, verbose_name='Территория исполнения')
     adress = models.CharField(max_length=512, blank=True, verbose_name='Адрес')
     
-    def __str__(self) -> str:
-        return self.reestr_oferts
+
     
     
 
