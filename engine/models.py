@@ -38,6 +38,9 @@ class Reestr_oferts(models.Model):
 class Location(models.Model):
     name = models.CharField(max_length=128, verbose_name='Территория исполнения')
     
+    def __str__(self):
+        return self.name
+    
     
 class Contract_Data(models.Model):
     reestr_oferts = models.OneToOneField(Reestr_oferts, on_delete=models.PROTECT, verbose_name='Связанный договор')
@@ -48,6 +51,9 @@ class Contract_Data(models.Model):
     document_issuing_authority = models.CharField(max_length=512, blank=True, verbose_name='Кем выдан документ')
     location = models.OneToOneField(Location, on_delete=models.PROTECT, blank=True, verbose_name='Территория исполнения')
     adress = models.CharField(max_length=512, blank=True, verbose_name='Адрес')
+    
+    def __str__(self) -> str:
+        return self.reestr_oferts
     
     
 
