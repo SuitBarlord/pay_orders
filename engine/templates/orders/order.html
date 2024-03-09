@@ -13,6 +13,7 @@
     <div class="card-body">
       <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Цена - {{ order.price }}, Дата акта - {{ order.date_akt }}, Комментарий - {{ order.comment }}, Дата передачи в бухгалтерию - {{ order.date_buhgt }}</p>
       <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
+      <a href="{% url 'create_document' order.pk %}" class="btn btn-primary">Заполнить данные для формирования документа на печать</a>
     </div>
   </div>
 

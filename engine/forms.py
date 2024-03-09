@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Reestr_oferts, Exicuters, Filials
+from .models import Reestr_oferts, Exicuters, Filials, Contract_Data
 from django import forms
 
 class CreateOrderForm(ModelForm):
@@ -46,6 +46,20 @@ class EditExicuterForm(ModelForm):
     class Meta:
         model = Exicuters
         fields = ('fio', 'filial')
+        
+        
+        
+class CreateContractData(ModelForm):
+    def __init__(self, *args, reestr_oferts=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if reestr_oferts == None:
+            pass 
+        else:
+            self.fields['reestr_oferts'].queryset = Reestr_oferts.objects.filter(id=reestr_oferts)
+    class Meta:
+        model = Contract_Data
+        fields = ('reestr_oferts', 'identification_document', 'passport_series', 'number_passport', 'document_issue_date', 'document_issuing_authority', 'location', 'adress')
+         
         
         
 # from django import forms

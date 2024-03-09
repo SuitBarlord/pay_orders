@@ -34,6 +34,9 @@ class Reestr_oferts(models.Model):
     date_buhgt = models.DateField(verbose_name='Дата передачи в бухгалтерию')
     comment = models.CharField(max_length=512, verbose_name='Комментарий', blank=True)
     
+    def __str__(self) -> str:
+        return self.number_orders_vozm
+    
     
 class Location(models.Model):
     name = models.CharField(max_length=128, verbose_name='Территория исполнения')

@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 from .models import Reestr_oferts, Filials, Exicuters
-from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm, CreateExicuterFilialFilterForm
+from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm, CreateExicuterFilialFilterForm, CreateContractData
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
 
@@ -173,6 +173,24 @@ class EditExicutor(PermissionRequiredMixin, UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['exicuter'] = Exicuters.objects.all()
         return context
+    
+    
+def create_document(request, id_order):
+    if request.method == 'POST':
+        if not request.user.has_perm('engine.add_reestr_oferts'):
+            raise PermissionError
+        else:
+            document_form = CreateContractData(request.POST)
+            if document_form.is_valid():
+                document_form.save()
+                return redirect('/paid_departure/filials/')
+    else:
+        document_form = CreateContractData(reestr_oferts=id_order)
+        context = {
+            'form': document_form
+        }
+        return render(request, 'orders/create_document.html', context=context)
+            
     
 
 import PyPDF2
