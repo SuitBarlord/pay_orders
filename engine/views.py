@@ -135,9 +135,7 @@ def create_orders(request):
                 return render(request, 'orders/create_order.html', {'form': order_form})
     else:
         if not request.user.has_perm('engine.view_reestr_oferts'):
-            print(request.user.filial)
             id_filial = Filials.objects.filter(name=request.user.filial)
-            print(id_filial[0].id)
             order_form = CreateOrderForm(name_filial=request.user.filial, exicutor=id_filial[0].id)
             context = {
                 'form': order_form
