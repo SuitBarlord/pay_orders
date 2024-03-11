@@ -118,7 +118,7 @@ def get_order(request, id_order):
             raise PermissionError
     else:
         order = Reestr_oferts.objects.get(pk=id_order)
-        print(order.contract_data.reestr_oferts_id)
+        # print(order.contract_data.reestr_oferts_id)
     context = {
         'order': order
     }
@@ -178,7 +178,8 @@ class EditExicutor(PermissionRequiredMixin, UpdateView):
         context['exicuter'] = Exicuters.objects.all()
         return context
     
-    
+
+@login_required
 def create_document(request, id_order):
     if request.method == 'POST':
         if not request.user.has_perm('engine.add_reestr_oferts'):
@@ -281,9 +282,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from docx import Document
 from docxtpl import DocxTemplate
+@login_required
 def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
-    document_data = Contract_Data.objects.get(pk=id_document)
+    document_data = Contract_Data.objects.get(reestr_oferts_id=id_document)
     exicutor = Exicuters.objects.get(pk=order.exicutor_id)
     print(document_data)
 
@@ -317,8 +319,9 @@ def preview_template(request, id_document):
                'document_issuing_authority': document_data.document_issuing_authority
                }
     doc.render(context)
-    doc.save("final.docx")
-
+    doc.save(f"{order.number_orders_vozm}.docx")
+    
+    # return JsonResponse({'status': 200})
     return redirect(f'/paid_departure/filials/orders/order/{id_document}/')
 
     
