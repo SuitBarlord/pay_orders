@@ -14,8 +14,8 @@
       <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Цена - {{ order.price }}, Дата акта - {{ order.date_akt }}, Комментарий - {{ order.comment }}, Дата передачи в бухгалтерию - {{ order.date_buhgt }}</p>
       <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
       {% if order.contract_data.reestr_oferts %}
-        <a href="{% url 'edit_document' order.pk %}" class="btn btn-primary">Редактировать данные для формирования документа на печать</a>
-        <a href="{% url 'preview_docx' order.pk %}" class="btn btn-primary">Сформировать файл договора</a>
+        <a href="{% url 'edit_document' order.contract_data.id%}" class="btn btn-primary">Редактировать данные для формирования документа на печать</a>
+        <a id="btn" href="{% url 'preview_docx' order.pk %}" class="btn btn-primary">Сформировать файл договора</a>
       {% else %}
         <a href="{% url 'create_document' order.pk %}" class="btn btn-primary">Заполнить данные для формирования документа на печать</a>
       {% endif %}
@@ -23,4 +23,41 @@
   </div>
 
 </div>
+<style type="text/css">
+  .loader {
+    border: 16px solid #f3f3f3; /* серый цвет */
+    border-top: 16px solid #3498db; /* синий цвет */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+  document.getElementById("btn").addEventListener("click", function() {
+    var loader = document.createElement("div"); // Создаем элемент div для лоадера
+    loader.classList.add("loader"); // Добавляем класс "loader" для применения стилей
+    document.body.appendChild(loader); // Добавляем лоадер на страницу
+
+    // Отправляем Ajax запрос на сервер
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            loader.remove(); // Убираем лоадер
+            // Действие выполнено, можно выполнить другие действия
+        }
+    };
+    xmlhttp.open("GET", "/paid_departure/filials/preview_docx/{{order.pk}}/", true); // Замените "/your-ajax-url/" на ваш URL-адрес
+    xmlhttp.send();
+});
+
+</script>
 {% endblock %}

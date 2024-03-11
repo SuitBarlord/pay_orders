@@ -118,6 +118,7 @@ def get_order(request, id_order):
             raise PermissionError
     else:
         order = Reestr_oferts.objects.get(pk=id_order)
+        print(order.contract_data.reestr_oferts_id)
     context = {
         'order': order
     }
@@ -212,7 +213,8 @@ class EditContractData(PermissionRequiredMixin, UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['contract_data'] = Contract_Data.objects.all()
         return context
-            
+        
+
     
 
 # import PyPDF2
@@ -282,18 +284,37 @@ from docxtpl import DocxTemplate
 def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
     document_data = Contract_Data.objects.get(pk=id_document)
+    exicutor = Exicuters.objects.get(pk=order.exicutor_id)
     print(document_data)
+
+    name_parts = exicutor.fio.split()
+
+    fio = name_parts[0]
+    initials = name_parts[1][0] + '.' + name_parts[2][0] + '.'
+    exicutor_short = fio + ' ' + initials
+
+    name_parts_order = order.fio.split()
+    
+    fio_order = name_parts_order[0]
+    initials_order = name_parts_order[1][0] + '.' + name_parts_order[2][0] + '.'
+    fio_short = fio_order + ' ' + initials_order
+
 
     doc = DocxTemplate("example.docx")
     context = { 'number' : document_data.reestr_oferts, 
                'fio': order.fio, 
+               'fio_short': fio_short,
                'identification_document': document_data.identification_document, 
                'passport_series': document_data.passport_series, 
                'number_passport': document_data.number_passport, 
                'document_issue_date': document_data.document_issue_date,
                'location': document_data.location,
                'price': order.price,
-               'adress': document_data.adress
+               'adress': document_data.adress,
+               'exicutor_position': exicutor.position_filial,
+               'exicutor': exicutor.fio,
+               'exicutor_short': exicutor_short,
+               'document_issuing_authority': document_data.document_issuing_authority
                }
     doc.render(context)
     doc.save("final.docx")
