@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import JsonResponse
 
 # Create your views here.
-from .models import Reestr_oferts, Filials, Exicuters
-from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm, CreateExicuterFilialFilterForm, CreateContractData
+from .models import Reestr_oferts, Filials, Exicuters, Contract_Data
+from .forms import CreateOrderForm, CreateExicuterForm, EditExicuterForm, CreateExicuterFilialFilterForm, CreateContractData, EditContractData
 from django.views.generic.edit import UpdateView
 from .filters import ProductFilter
 
@@ -79,7 +79,10 @@ def get_orders(request, pk):
         #         return JsonResponse({'errors':errors}, status=400)
 
         exicuters_filial = Exicuters.objects.filter(filial_id=pk)
+        # reestr_ofert = Reestr_oferts.objects.get(pk=2)
         filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
+        # document = reestr_ofert.contract_data
+        # print(document)
         return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
     
     
@@ -181,15 +184,34 @@ def create_document(request, id_order):
             raise PermissionError
         else:
             document_form = CreateContractData(request.POST)
+            ready = Contract_Data.objects.filter(reestr_oferts=id_order)
+            print(ready)
             if document_form.is_valid():
                 document_form.save()
                 return redirect('/paid_departure/filials/')
     else:
-        document_form = CreateContractData(reestr_oferts=id_order)
-        context = {
-            'form': document_form
-        }
-        return render(request, 'orders/create_document.html', context=context)
+        ready = Contract_Data.objects.filter(reestr_oferts=id_order)
+        if not ready:
+            document_form = CreateContractData(reestr_oferts=id_order)
+            context = {
+                'form': document_form
+            }
+            return render(request, 'orders/create_document.html', context=context)
+        else: 
+            return redirect('/main/')
+        
+
+class EditContractData(PermissionRequiredMixin, UpdateView):
+    permission_required = 'engine.change_contract_data'
+    model = Contract_Data
+    form_class = EditContractData
+    template_name = 'orders/edit_contract.html'
+    success_url = '/paid_departure/filials/'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['contract_data'] = Contract_Data.objects.all()
+        return context
             
     
 

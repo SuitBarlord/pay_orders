@@ -52,7 +52,7 @@ class Contract_Data(models.Model):
     number_passport = models.CharField(max_length=6, blank=True, verbose_name='Номер паспорта')
     document_issue_date = models.DateField(blank=True, verbose_name='Дата выдачи документа', default='20.10.2024')
     document_issuing_authority = models.CharField(max_length=512, blank=True, verbose_name='Кем выдан документ')
-    location = models.OneToOneField(Location, on_delete=models.PROTECT, blank=True, verbose_name='Территория исполнения')
+    location = models.ForeignKey(Location, on_delete=models.PROTECT, blank=True, verbose_name='Территория исполнения')
     adress = models.CharField(max_length=512, blank=True, verbose_name='Адрес')
     
 

@@ -59,6 +59,12 @@ class CreateContractData(ModelForm):
     class Meta:
         model = Contract_Data
         fields = ('reestr_oferts', 'identification_document', 'passport_series', 'number_passport', 'document_issue_date', 'document_issuing_authority', 'location', 'adress')
+
+
+class EditContractData(ModelForm):
+    class Meta:
+        model = Contract_Data
+        fields = ('identification_document', 'passport_series', 'number_passport', 'document_issue_date', 'document_issuing_authority', 'location', 'adress')
          
         
         
