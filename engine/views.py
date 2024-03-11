@@ -215,58 +215,58 @@ class EditContractData(PermissionRequiredMixin, UpdateView):
             
     
 
-import PyPDF2
-def pdf(request):
-    import PyPDF2
+# import PyPDF2
+# def pdf(request):
+#     import PyPDF2
 
-    # Открываем исходный файл PDF
-    from PyPDF2 import PdfFileReader, PdfFileWriter
-    from reportlab.lib.pagesizes import letter
-    from reportlab.pdfgen import canvas
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
-    # Открыть исходный файл PDF
-    with open('example.pdf', 'rb') as file:
-        pdf = PdfFileReader(file)
+#     # Открываем исходный файл PDF
+#     from PyPDF2 import PdfFileReader, PdfFileWriter
+#     from reportlab.lib.pagesizes import letter
+#     from reportlab.pdfgen import canvas
+#     from reportlab.pdfbase import pdfmetrics
+#     from reportlab.pdfbase.ttfonts import TTFont
+#     # Открыть исходный файл PDF
+#     with open('example.pdf', 'rb') as file:
+#         pdf = PdfFileReader(file)
 
-        # Создать новый файл PDF для записи
-        output = PdfFileWriter()
+#         # Создать новый файл PDF для записи
+#         output = PdfFileWriter()
 
-        # Получить первую страницу документа
-        page = pdf.getPage(0)
+#         # Получить первую страницу документа
+#         page = pdf.getPage(0)
 
-        # Создать новую страницу с теми же размерами, что и исходная
-        c = canvas.Canvas('вставленный_файл.pdf', pagesize=letter)
-        pdfmetrics.registerFont(TTFont('CustomFont', 'helvetica.ttf'))
-        # Установить нужный шрифт и размер
-        c.setFont('CustomFont', 14)
+#         # Создать новую страницу с теми же размерами, что и исходная
+#         c = canvas.Canvas('вставленный_файл.pdf', pagesize=letter)
+#         pdfmetrics.registerFont(TTFont('CustomFont', 'helvetica.ttf'))
+#         # Установить нужный шрифт и размер
+#         c.setFont('CustomFont', 14)
 
-        # Вставить текст на новой странице
-        c.drawString(200, 400, 'Новая строка')
+#         # Вставить текст на новой странице
+#         c.drawString(200, 400, 'Новая строка')
 
-        # Завершить рисование на новой странице
-        c.save()
+#         # Завершить рисование на новой странице
+#         c.save()
 
-        # Прочитать вставленный файл PDF
-        with open('вставленный_файл.pdf', 'rb') as inserted:
-            inserted_pdf = PdfFileReader(inserted)
+#         # Прочитать вставленный файл PDF
+#         with open('вставленный_файл.pdf', 'rb') as inserted:
+#             inserted_pdf = PdfFileReader(inserted)
 
-            # Получить вставленную страницу
-            inserted_page = inserted_pdf.getPage(0)
+#             # Получить вставленную страницу
+#             inserted_page = inserted_pdf.getPage(0)
 
-            # Скопировать содержимое исходной страницы на новую
-            inserted_page.mergeTranslatedPage(page, 0, 0, expand=False)
+#             # Скопировать содержимое исходной страницы на новую
+#             inserted_page.mergeTranslatedPage(page, 0, 0, expand=False)
 
-            # Добавить страницу в новый документ
-            output.addPage(inserted_page)
+#             # Добавить страницу в новый документ
+#             output.addPage(inserted_page)
 
-            # Добавить оставшиеся страницы исходного файла
-            for i in range(1, pdf.getNumPages()):
-                output.addPage(pdf.getPage(i))
+#             # Добавить оставшиеся страницы исходного файла
+#             for i in range(1, pdf.getNumPages()):
+#                 output.addPage(pdf.getPage(i))
 
-            # Сохранить новый файл
-            with open('измененный_файл.pdf', 'wb') as output_file:
-                output.write(output_file)
+#             # Сохранить новый файл
+#             with open('измененный_файл.pdf', 'wb') as output_file:
+#                 output.write(output_file)
 
 
 
@@ -279,11 +279,32 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from docx import Document
 from docxtpl import DocxTemplate
-def preview_template(request):
-        doc = DocxTemplate("example.docx")
-        context = { 'director' : "И.И.Иванов"}
-        doc.render(context)
-        doc.save("final.docx")
+def preview_template(request, id_document):
+    order = Reestr_oferts.objects.get(pk=id_document)
+    document_data = Contract_Data.objects.get(pk=id_document)
+    print(document_data)
+
+    doc = DocxTemplate("example.docx")
+    context = { 'number' : document_data.reestr_oferts, 
+               'fio': order.fio, 
+               'identification_document': document_data.identification_document, 
+               'passport_series': document_data.passport_series, 
+               'number_passport': document_data.number_passport, 
+               'document_issue_date': document_data.document_issue_date,
+               'location': document_data.location,
+               'price': order.price,
+               'adress': document_data.adress
+               }
+    doc.render(context)
+    doc.save("final.docx")
+
+    return redirect(f'/paid_departure/filials/orders/order/{id_document}/')
+
+    
+    # doc = DocxTemplate("example.docx")
+    # context = { 'number' : "И.И.Иванов"}
+    # doc.render(context)
+    # doc.save("final.docx")
 
 
 

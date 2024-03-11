@@ -15,6 +15,7 @@ class Filials(models.Model):
 
 class Exicuters(models.Model):
     fio = models.CharField(max_length=128, blank=False, verbose_name='ФИО исполнителя')
+    position_filial = models.CharField(max_length=128, blank=False, default='Администратор', verbose_name='Должность')
     filial = models.ForeignKey(Filials, on_delete=models.PROTECT, verbose_name='Филиал к котрому привязан исполнитель')
     def __str__(self):
         return self.fio
