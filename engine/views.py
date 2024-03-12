@@ -83,6 +83,38 @@ def get_orders(request, pk):
         filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
         # document = reestr_ofert.contract_data
         # print(document)
+        filial = Filials.objects.get(pk=pk)
+        import os
+
+        folder_path = f"dox/{filial.directory}"
+        orders = Reestr_oferts.objects.filter(filial_id=pk)
+        files = tuple(orders.values_list('number_orders_vozm', flat=True))
+        files_orders = [element + '.docx' for element in files]
+        print(files_orders)
+        # file_names = ["имя_файла1", "имя_файла2", "имя_файла3"]
+        ready_files = []
+
+        if os.path.exists(folder_path):
+            files = os.listdir(folder_path)
+            for file in files_orders:
+                if file in files:
+                    ready_files.append(file)
+                else:
+                    ready_files.append(None)
+        print(ready_files)
+            # existing_files = [file for file in files if file in files]
+            # missing_files = [file for file in files if file not in files]
+            # print(existing_files)
+            # print(missing_files)
+        #     if missing_files:
+        #         print("Следующие файлы отсутствуют в папке:")
+        #         for file in missing_files:
+        #             print(file)
+        #     else:
+        #         print("Все файлы присутствуют в папке.")
+        # else:
+        #     print("Папка не существует.")
+
         return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
     
     
@@ -114,13 +146,50 @@ def get_order(request, id_order):
         user_filial = str(request.user.filial)
         if filial == user_filial:
             order = Reestr_oferts.objects.get(pk=id_order)
+            import os
+            filial = order.filial.directory
+            folder_path = f"dox/{filial}"
+            orders = Reestr_oferts.objects.filter(pk=id_order)
+            files = tuple(orders.values_list('number_orders_vozm', flat=True))
+            files_orders = [element + '.docx' for element in files]
+            print(files_orders)
+            # file_names = ["имя_файла1", "имя_файла2", "имя_файла3"]
+            ready_files = []
+
+            if os.path.exists(folder_path):
+                files = os.listdir(folder_path)
+                for file in files_orders:
+                    if file in files:
+                        ready_files.append(file)
+            print(ready_files)
         else:
             raise PermissionError
     else:
         order = Reestr_oferts.objects.get(pk=id_order)
         # print(order.contract_data.reestr_oferts_id)
+
+        filial = order.filial.directory
+        import os
+
+        folder_path = f"dox/{filial}"
+        orders = Reestr_oferts.objects.filter(pk=id_order)
+        files = tuple(orders.values_list('number_orders_vozm', flat=True))
+        files_orders = [element + '.docx' for element in files]
+        print(files_orders)
+        # file_names = ["имя_файла1", "имя_файла2", "имя_файла3"]
+        ready_files = []
+
+        if os.path.exists(folder_path):
+            files = os.listdir(folder_path)
+            for file in files_orders:
+                if file in files:
+                    ready_files.append(file)
+        print(ready_files)
+
+
     context = {
-        'order': order
+        'order': order,
+        'ready_files': ready_files
     }
     return render(request, 'orders/order.html', context=context)
 
