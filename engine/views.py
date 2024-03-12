@@ -287,6 +287,7 @@ def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
     document_data = Contract_Data.objects.get(reestr_oferts_id=id_document)
     exicutor = Exicuters.objects.get(pk=order.exicutor_id)
+    filial = Filials.objects.get(pk=order.filial_id)
     print(document_data)
 
     name_parts = exicutor.fio.split()
@@ -319,7 +320,7 @@ def preview_template(request, id_document):
                'document_issuing_authority': document_data.document_issuing_authority
                }
     doc.render(context)
-    doc.save(f"dox/{order.number_orders_vozm}.docx")
+    doc.save(f"dox/{filial.directory}/{order.number_orders_vozm}.docx")
     
     # return JsonResponse({'status': 200})
     return redirect(f'/paid_departure/filials/orders/order/{id_document}/')

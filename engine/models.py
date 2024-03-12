@@ -8,6 +8,7 @@ from django.db import models
 
 class Filials(models.Model):
     name = models.CharField(max_length=128, verbose_name='Филиал')
+    directory = models.CharField(max_length=128, verbose_name='Директория договоров филиала', default='/')
     def __str__(self):
         return self.name
 
