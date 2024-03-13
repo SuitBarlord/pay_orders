@@ -20,7 +20,7 @@
       {% endif %}
       <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
       {% if order.contract_data.reestr_oferts %}
-        <a href="{% url 'edit_document' order.contract_data.id%}" class="btn btn-primary">Редактировать данные для формирования документа на печать</a>
+        <a href="{% url 'edit_document' order.contract_data.id%}" class="btn btn-primary">Редактировать данные документа печати</a>
         <a id="btn" href="{% url 'preview_docx' order.pk %}" class="btn btn-primary">Сформировать файл договора</a>
       {% else %}
         <a href="{% url 'create_document' order.pk %}" class="btn btn-primary">Заполнить данные для формирования документа на печать</a>
