@@ -21,9 +21,9 @@
           <div class="card-body">
             <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Дата акта - {{ order.date_akt }}</p>
             {% if order.contract_data.reestr_oferts  %}
-              <p>Данные на печать акта заполнены</p>
+              <p class="text-primary">Данные на печать акта заполнены</p>
             {% else %}
-              <p>Данные на печать акта еще не заполнены</p>
+              <p class="text-warning">Данные на печать акта еще не заполнены</p>
             {% endif %}
             <a href="{% url 'get_order' id_order=order.pk %}" class="btn btn-primary">Перейти к договору</a>
           </div>

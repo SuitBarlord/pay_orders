@@ -13,9 +13,9 @@
     <div class="card-body">
       <p class="card-text">ФИО - {{ order.fio }}, ФИО исполнителя - {{ order.exicutor }}, Цена - {{ order.price }}, Дата акта - {{ order.date_akt }}, Комментарий - {{ order.comment }}, Дата передачи в бухгалтерию - {{ order.date_buhgt }}</p>
       {% if not ready_files %}
-        <p>Файл договора еще не был сформирован</p>
+        <p class="text-warning">Файл договора еще не был сформирован</p>
       {% else %}
-        <p>Файл договора был сформирован</p>
+        <p class="text-primary">Файл договора был сформирован</p>
       {% endif %}
       <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
       {% if order.contract_data.reestr_oferts %}
