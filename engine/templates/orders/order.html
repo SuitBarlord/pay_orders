@@ -16,6 +16,7 @@
         <p class="text-warning">Файл договора еще не был сформирован</p>
       {% else %}
         <p class="text-primary">Файл договора был сформирован</p>
+        <a class="btn btn-primary" href="{% url 'download_document' order.pk %}">Скачать документ</a>
       {% endif %}
       <a href="{% url 'edit_order' order.pk %}" class="btn btn-primary">Редактировать</a>
       {% if order.contract_data.reestr_oferts %}

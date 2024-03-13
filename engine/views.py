@@ -400,6 +400,21 @@ def preview_template(request, id_document):
     # doc.render(context)
     # doc.save("final.docx")
 
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
 
+def download_document(request, id_document):
+    # Указываете путь к файлу, который нужно скачать
+    order = Reestr_oferts.objects.get(pk=id_document)
+    # document_data = Contract_Data.objects.get(reestr_oferts_id=id_document)
+    # exicutor = Exicuters.objects.get(pk=order.exicutor_id)
+    filial = Filials.objects.get(pk=order.filial_id)
 
+    file_path = f'dox/{filial.directory}/{order.number_orders_vozm}.docx'
+
+    # Отправляем файл в качестве ответа
+    response = FileResponse(open(file_path, 'rb'))
+    # response['Content-Disposition'] = f'attachment; filename="{order.number_orders_vozm}.ext"'
+
+    return response
 
