@@ -351,7 +351,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from docx import Document
 from docxtpl import DocxTemplate
-import pymorphy2
+import pymorphy3
 @login_required
 def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
@@ -376,7 +376,7 @@ def preview_template(request, id_document):
 
 
     def change_case(fio, case):
-        morph = pymorphy2.MorphAnalyzer()
+        morph = pymorphy3.MorphAnalyzer()
         parsed = morph.parse(fio)[0]
         return parsed.inflect({case}).word
 
