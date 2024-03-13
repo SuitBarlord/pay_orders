@@ -351,6 +351,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from docx import Document
 from docxtpl import DocxTemplate
+import pymorphy2
 @login_required
 def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
@@ -372,10 +373,81 @@ def preview_template(request, id_document):
     fio_short = fio_order + ' ' + initials_order
 
 
+
+
+    def change_case(fio, case):
+        morph = pymorphy2.MorphAnalyzer()
+        parsed = morph.parse(fio)[0]
+        return parsed.inflect({case}).word
+
+    last_name = fio
+    case = "gent"
+
+    changed_fio = change_case(last_name, case).capitalize()
+
+    from datetime import datetime
+
+    # date_object = datetime.strptime(str(order.date_akt), '%Y-%m-%d')
+    # formatted_date = date_object.strftime('%d %B %Y')
+    # print(formatted_date)  # Output: 20 March 2024
+
+    # from datetime import datetime
+    # import calendar
+    
+    # date_object = datetime.strptime(str(order.date_akt), '%Y-%m-%d').date()
+
+    # month_number = date_object.month
+    # month_name = calendar.month_name[month_number]
+
+    # print(month_name)
+
+    # formatted_date = date_object.strftime("%d {0} %Y".format(month_name))
+    # print(formatted_date)  # Output: 20 марта 2024
+
+
+    import calendar
+
+    # Создаем словарь с названиями месяцев на русском языке
+    months = {
+        1: 'января',
+        2: 'февраля',
+        3: 'марта',
+        4: 'апреля',
+        5: 'мая',
+        6: 'июня',
+        7: 'июля',
+        8: 'августа',
+        9: 'сентября',
+        10: 'октября',
+        11: 'ноября',
+        12: 'декабря'
+    }
+    date_object = datetime.strptime(str(order.date_akt), '%Y-%m-%d').date()
+    date_string = str(date_object)
+    date_parts = date_string.split('-')
+    year = int(date_parts[0])
+    month = int(date_parts[1])
+    day = int(date_parts[2])
+
+    # Получаем название месяца на русском языке
+    month_name = months[month]
+
+    formatted_date = f"«{day}» {month_name} {year}"
+    print(formatted_date)  # Output: 20 марта 2024
+
+
+
+
+
+
+
+
     doc = DocxTemplate("example.docx")
     context = { 'number' : document_data.reestr_oferts, 
                'fio': order.fio, 
                'fio_short': fio_short,
+               'initials_order': initials_order,
+               'changed_fio': changed_fio,
                'identification_document': document_data.identification_document, 
                'passport_series': document_data.passport_series, 
                'number_passport': document_data.number_passport, 
@@ -386,7 +458,9 @@ def preview_template(request, id_document):
                'exicutor_position': exicutor.position_filial,
                'exicutor': exicutor.fio,
                'exicutor_short': exicutor_short,
-               'document_issuing_authority': document_data.document_issuing_authority
+               'initials': initials,
+               'document_issuing_authority': document_data.document_issuing_authority,
+               'date_akt': formatted_date
                }
     doc.render(context)
     doc.save(f"dox/{filial.directory}/{order.number_orders_vozm}.docx")
