@@ -52,6 +52,18 @@
     var loader = document.createElement("div"); // Создаем элемент div для лоадера
     loader.classList.add("loader"); // Добавляем класс "loader" для применения стилей
     document.body.appendChild(loader); // Добавляем лоадер на страницу
+    // Включаем блокировку
+    document.body.style.pointerEvents = "none";
+
+    // Выключаем блокировку после завершения запроса
+    xmlhttp.onreadystatechange = function() {
+
+            // Действие выполнено, можно выполнить другие действия
+            
+            // Выключаем блокировку
+            document.body.style.pointerEvents = "auto";
+        }
+
 
     // Отправляем Ajax запрос на сервер
     var xmlhttp = new XMLHttpRequest();
