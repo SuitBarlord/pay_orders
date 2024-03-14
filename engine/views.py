@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 from .models import Reestr_oferts, Filials, Exicuters, Contract_Data
@@ -198,18 +199,31 @@ def get_order(request, id_order):
 def create_orders(request):
     if request.method == 'POST':
         if not request.user.has_perm('engine.add_reestr_oferts'):
-            raise PermissionError
+            request.session['error_message'] = 'Запись не была создана. Недостаточно прав.'
+            return redirect('/paid_departure/create_order/')
+            # raise PermissionError
         else:
             order_form = CreateOrderForm(request.POST)
             if order_form.is_valid():
                 order_form.save()
-                return redirect('/paid_departure/filials/')
+                request.session['success_message'] = 'Запись успешно создана.'
+                # messages.success(request, 'Успешно создано дело.')
+                print(request.POST)
+                order = Reestr_oferts.objects.get(number_orders_vozm=request.POST['number_orders_vozm'])
+                return redirect(f'/paid_departure/filials/orders/order/{order.id}/')
             else:
                 return render(request, 'orders/create_order.html', {'form': order_form})
     else:
         if not request.user.has_perm('engine.view_reestr_oferts'):
             id_filial = Filials.objects.filter(name=request.user.filial)
             order_form = CreateOrderForm(name_filial=request.user.filial, exicutor=id_filial[0].id)
+            success_message = request.session.pop('success_message', None)
+            if success_message:
+                messages.success(request, success_message)
+            error_message = request.session.pop('error_message', None)
+            if error_message:
+                messages.error(request, error_message)
+
             context = {
                 'form': order_form
             }

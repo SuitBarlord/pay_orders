@@ -9,7 +9,16 @@
 </head>
 <body>
     <header class="site-header">
-
+      {% if messages %}
+      <div class="messages">
+          {% for message in messages %}
+              <div class="{% if message.tags %}{{ message.tags }}-message{% endif %}">
+                  {{ message }}
+              </div>
+          {% endfor %}
+      </div>
+  {% endif %}
+  
 
       <div class="container-fluid">
       <div class="row justify-content-center overflow-hidden">
@@ -29,3 +38,29 @@
     </header>
 </body>
 </html>
+<style>
+  .success-message {
+      text-align: center;
+      background-color: green;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+  .error-message {
+      text-align: center;
+      background-color: red;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+  .info-message {
+      text-align: center;
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+   /* .messages {
+        text-align: center;
+    } */
+</style>

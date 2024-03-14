@@ -25,7 +25,7 @@ class Exicuters(models.Model):
 
 class Reestr_oferts(models.Model):
 
-    number_orders_vozm = models.CharField(max_length=20, blank=False, verbose_name='Номер договора возм.', db_index=True)
+    number_orders_vozm = models.CharField(max_length=20, blank=False, verbose_name='Номер договора возм.', db_index=True, unique=True)
     fio = models.CharField(max_length=128, blank=False, verbose_name='ФИО')
     date_orders = models.DateField(auto_now_add=True, verbose_name='Дата договора')
 
