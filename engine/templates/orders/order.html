@@ -2,7 +2,15 @@
 {% block nav %}{% include 'orders/nav.html' %}{% endblock %}
 {% block content %}
 <div>
-
+  {% if messages %}
+  <div class="messages">
+      {% for message in messages %}
+          <div class="{% if message.tags %}{{ message.tags }}-message{% endif %}">
+              {{ message }}
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
 
 
 </div>
@@ -44,6 +52,31 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+  .success-message {
+      text-align: center;
+      background-color: green;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+  .error-message {
+      text-align: center;
+      background-color: red;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+  .info-message {
+      text-align: center;
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+   /* .messages {
+        text-align: center;
+    } */
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

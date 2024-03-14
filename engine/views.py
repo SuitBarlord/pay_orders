@@ -142,6 +142,12 @@ def create_exicuter(request):
 @login_required
 def get_order(request, id_order):
     if not request.user.has_perm('engine.view_reestr_oferts'):
+        success_message = request.session.pop('success_message', None)
+        if success_message:
+            messages.success(request, success_message)
+        error_message = request.session.pop('error_message', None)
+        if error_message:
+            messages.error(request, error_message)
         queryset = Reestr_oferts.objects.get(pk=id_order)
         filial = str(queryset.filial)
         user_filial = str(request.user.filial)
@@ -273,7 +279,11 @@ def create_document(request, id_order):
             print(ready)
             if document_form.is_valid():
                 document_form.save()
-                return redirect('/paid_departure/filials/')
+                request.session['success_message'] = 'Запись успешно создана.'
+                return redirect(f'/paid_departure/filials/orders/order/{id_order}/')
+            else:
+                request.session['error_message'] = 'Запись не создана. Возможно запись с такими данными уже есть.'
+                return redirect(f'/paid_departure/filials/orders/order/{id_order}/')
     else:
         ready = Contract_Data.objects.filter(reestr_oferts=id_order)
         if not ready:
@@ -365,7 +375,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from docx import Document
 from docxtpl import DocxTemplate
-import pymorphy3
+import pymorphy2
 @login_required
 def preview_template(request, id_document):
     order = Reestr_oferts.objects.get(pk=id_document)
@@ -390,7 +400,7 @@ def preview_template(request, id_document):
 
 
     def change_case(fio, case):
-        morph = pymorphy3.MorphAnalyzer()
+        morph = pymorphy2.MorphAnalyzer()
         parsed = morph.parse(fio)[0]
         return parsed.inflect({case}).word
 
@@ -398,6 +408,8 @@ def preview_template(request, id_document):
     case = "gent"
 
     changed_fio = change_case(last_name, case).capitalize()
+
+    print(changed_fio)
 
     from datetime import datetime
 
