@@ -10,6 +10,8 @@
         {{ filter.form|crispy }}
       <button class="btn btn-primary" type="submit">Применить</button>
       </form>
+
+      <a href="{{request.path}}"><button style="margin-top: 10px;" class="btn btn-primary">Сбросить фильтры</button></a>
     </div>
     <div class="col-7 position-relative border-right">
       <div class="overflow-auto scroll-container">
