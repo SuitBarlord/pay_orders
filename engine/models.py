@@ -15,9 +15,14 @@ class Filials(models.Model):
 
 
 class Exicuters(models.Model):
+    gender_choices = (
+        ('masc', 'Мужской'),
+        ('femn', 'Женский'),
+    )
     fio = models.CharField(max_length=128, blank=False, verbose_name='ФИО исполнителя')
     position_filial = models.CharField(max_length=128, blank=False, default='Администратор', verbose_name='Должность')
     filial = models.ForeignKey(Filials, on_delete=models.PROTECT, verbose_name='Филиал к котрому привязан исполнитель')
+    gender = models.CharField(max_length=4, choices=gender_choices, blank=False, default='femn', verbose_name='Пол')
     def __str__(self):
         return self.fio
 

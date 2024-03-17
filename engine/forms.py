@@ -27,7 +27,7 @@ class CreateOrderForm(ModelForm):
 class CreateExicuterForm(ModelForm):
     class Meta:
         model = Exicuters
-        fields = ('fio', 'filial')
+        fields = ('fio', 'position_filial', 'filial', 'gender')
         
 
 class CreateExicuterFilialFilterForm(ModelForm):
@@ -39,13 +39,13 @@ class CreateExicuterFilialFilterForm(ModelForm):
             self.fields['filial'].queryset = Filials.objects.filter(id=id)
     class Meta:
         model = Exicuters
-        fields = ('fio', 'filial')
+        fields = ('fio', 'position_filial', 'filial', 'gender')
         
         
 class EditExicuterForm(ModelForm):
     class Meta:
         model = Exicuters
-        fields = ('fio', 'filial')
+        fields = ('fio', 'position_filial', 'filial', 'gender')
         
         
         
