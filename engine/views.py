@@ -59,7 +59,11 @@ def get_orders(request, pk):
                 form = CreateExicuterFilialFilterForm(id=pk)
                 # Инициализация выбора поля со связанной моделью по умолчанию
                 form.initial['filial'] = pk
-                filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk), id=pk)
+                if not request.GET.get('orderby'):
+                    orderby = 'id'
+                else:
+                    orderby = request.GET.get('orderby')
+                filter = ProductFilter(request.GET, queryset=Reestr_oferts.objects.filter(filial_id=pk).order_by(orderby), id=pk)
                 return render(request, 'orders/orders.html', {'filter': filter, 'exicuters_filial': exicuters_filial, 'form': form})
             else: 
                 # Принудительное исключение 

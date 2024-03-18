@@ -8,6 +8,12 @@
       <h5>Поля фильтрации</h5>
       <form method="GET">
         {{ filter.form|crispy }}
+        <label class="mr-2" for="framework">Сортировка:</label>
+            <select id="framework" name="orderby" class="form-control mr-2">
+                <option value="">По умолчанию</option>
+                <option value="date_akt">По возрастанию даты</option>
+                <option value="-date_akt">По убыванию даты</option>
+            </select>
       <button class="btn btn-primary" type="submit">Применить</button>
       </form>
 
