@@ -382,6 +382,9 @@ from docxtpl import DocxTemplate
 import pymorphy3
 @login_required
 def preview_template(request, id_document):
+
+    celery = order_created.delay()
+    print(celery)
     order = Reestr_oferts.objects.get(pk=id_document)
     document_data = Contract_Data.objects.get(reestr_oferts_id=id_document)
     exicutor = Exicuters.objects.get(pk=order.exicutor_id)
@@ -502,6 +505,10 @@ def preview_template(request, id_document):
                'date_akt': formatted_date
                }
     doc.render(context)
+
+    import time 
+    # time.sleep(20)
+
     doc.save(f"dox/{filial.directory}/{order.number_orders_vozm}.docx")
     
     # return JsonResponse({'status': 200})
@@ -513,6 +520,11 @@ def preview_template(request, id_document):
     # doc.render(context)
     # doc.save("final.docx")
 
+from .tasks import order_created
+
+# запуск асинхронной задачи
+# order_created.delay(448)
+
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 
@@ -522,9 +534,10 @@ def download_document(request, id_document):
     # document_data = Contract_Data.objects.get(reestr_oferts_id=id_document)
     # exicutor = Exicuters.objects.get(pk=order.exicutor_id)
     filial = Filials.objects.get(pk=order.filial_id)
-
+    # import time 
+    # time.sleep(2)
     file_path = f'dox/{filial.directory}/{order.number_orders_vozm}.docx'
-
+    order_created.delay()
     # Отправляем файл в качестве ответа
     response = FileResponse(open(file_path, 'rb'))
     # response['Content-Disposition'] = f'attachment; filename="{order.number_orders_vozm}.ext"'
