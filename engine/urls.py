@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import main, create_orders, get_order, EditOrder, get_filials, get_orders, EditExicutor, create_exicuter, preview_template, create_document, EditContractData, download_document
+from .views import main, create_orders, get_order, EditOrder, get_filials, get_orders, EditExicutor, create_exicuter, preview_template, create_document, EditContractData, download_document, document_ready
 
 
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('filials/orders/order/create_document/<int:id_order>/', create_document, name='create_document'),
     path('filials/orders/order/edit_document/<int:pk>/', EditContractData.as_view(), name='edit_document'),
     path('filials/orders/order/download/<int:id_document>/', download_document, name='download_document'),
+    path('filials/orders/order/document_ready/<int:id_order>/', document_ready, name='document_ready'),
     # path('pdf/', pdf),
     path('preview_docx/<int:id_document>/', preview_template, name='preview_docx'),
 ]

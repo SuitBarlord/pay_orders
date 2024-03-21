@@ -81,6 +81,21 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+
+  setInterval(function(){   
+
+      $.ajax({
+          url: '/paid_departure/filials/orders/order/document_ready/{{order.pk}}/', 
+          dataType: 'json',
+      })
+      .done (function(obj){  // действия в случае успеха
+          console.log('Ответ получен' + obj.ready_files);
+      })
+      .fail(function(){   // действия в случае ошибки
+          console.log('Ошибка соединения с сервером');
+      });
+  }, 5000);  // внутренняя функция будет выполняться каждые 5 секунд
+
   document.getElementById("btn").addEventListener("click", function() {
     var loader = document.createElement("div"); // Создаем элемент div для лоадера
     loader.classList.add("loader"); // Добавляем класс "loader" для применения стилей
